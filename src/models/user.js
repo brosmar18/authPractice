@@ -25,7 +25,7 @@ const userSchema = (sequelizeDatabase, DataTypes) => {
 
     model.beforeCreate(async (user) => {
         let hashedPassword = await bcrypt.hash(user.password, 5);
-        console.log('Hashed password in beforeCreate: ', bcrypt.hashedPassword);
+        console.log('Hashed password in beforeCreate: ', hashedPassword);
         user.password = hashedPassword;
     });
 
