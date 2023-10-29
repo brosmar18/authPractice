@@ -4,14 +4,25 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "lint": "eslint **/*.js",
+    "test": "NODE_ENV=test jest --verbose --coverage",
+    "test-watch": "NODE_ENV=test jest --watchAll --verbose --coverage",
+    "db:config": "sequelize init:config",
+    "db:create": "sequelize db:create"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "base-64": "^1.0.0",
+    "bcrypt": "^5.1.1",
     "dotenv": "^16.3.1",
     "eslint": "^8.52.0",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "pg": "^8.11.3",
+    "sequelize": "^6.33.0",
+    "sequelize-cli": "^6.6.1",
+    "sqlite": "^5.0.1"
   }
 }
