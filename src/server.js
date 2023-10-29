@@ -11,11 +11,13 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(authRouter);
+
 app.use('/', (req, res, next) => {
     res.status(200).send('Hello World!');
 });
 
-app.use(authRouter);
+
 
 const start = () => {
     app.listen(PORT, () => console.log(`Server is running on PORT: ${PORT}`));
