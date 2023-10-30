@@ -1,6 +1,10 @@
 'use strict';
 
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+require('dotenv').config();
+const SECRET = process.env.SECRET;
 
 const userSchema = (sequelizeDatabase, DataTypes) => {
     const model = sequelizeDatabase.define('user', {
@@ -21,6 +25,15 @@ const userSchema = (sequelizeDatabase, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
+        token: {
+            type: DataTypes.VIRTUAL,
+            get(){
+                return jwt.sign({ username: this.username}, SECRET, {expiresIn: 1000 * 60 * 60 * 60 * 24 * 7});
+            },
+            set(){
+                return jwt.sign({ username: this.username}, SECRET, {expiresIn: 1000 * 60 * 60 * 60 * 24 * 7});
+            },
+        },
     });
 
     model.beforeCreate(async (user) => {
@@ -29,7 +42,25 @@ const userSchema = (sequelizeDatabase, DataTypes) => {
         user.password = hashedPassword;
     });
 
+    model.authenticateBearer = async (token) => {
+        try {
+            let payload = jwt.verify(token, SECRET);
+            console.log('payload', payload);
+    
+            const user = await model.findOne({where: {username: payload.username}});
+    
+            if(user){
+                return user;
+            }
+        } catch(e) {
+            console.error(e);
+            return(e);
+        };
+    };
+
     return model;
+
 };
+
 
 module.exports = userSchema;

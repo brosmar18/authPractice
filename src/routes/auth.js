@@ -10,7 +10,10 @@ router.post('/signup', async (req, res, next) => {
     try {
         let newUser = await userModel.create(req.body);
         res.status(200).send(newUser);
+        console.log('Signup data:', req.body);
+
     } catch (e) {
+        console.error(e);
         next('Signup error occurred!');
     }
 });
